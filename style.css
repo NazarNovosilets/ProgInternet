@@ -86,13 +86,77 @@ th {
   border: 1px solid black;
   padding: 8px;
   text-align: center;
+  font-weight: bold;
+
+}
+
+td {
+  border: 1px solid black;
+  padding: 8px;
+  text-align: center;
+  font-weight: normal;
+}
+
+.studentsInfo {
+  font-size: large;
+  padding: 8px;
+  text-align: center;
+}
+
+.optionIcons {
+  width: 15px;
+  border: 1px solid black;
+}
+
+.optionIcons:hover {
+  background-color: lightgray;
+}
+
+.optionIcons:active {
+  font-weight: bold;
+  background-color: #ddd;
+}
+
+.plus {
+  width: 15px;
+  border: 1px solid black;
+  margin-right: 0;
+  margin-left: auto;
+  display: block;
+  position: relative;
+  top: -5px;
+}
+
+.plus:hover {
+  background-color: lightgray;
+}
+
+.plus:active {
+  font-weight: bold;
+  background-color: #ddd;
 }
 
 
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px;
+}
 
+.pagebtn {
+  padding: 3px 5px;
+  margin: 0 3px;
+  border: 1px solid black;
+  background-color: white;
+  cursor: pointer;
+}
 
-.class1 {
-  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
-  text-align: left;
-  color: aqua;
+.pagebtn:hover {
+  background-color: lightgray;
+}
+
+.pagebtn.active {
+  font-weight: bold;
+  background-color: #ddd;
 }
