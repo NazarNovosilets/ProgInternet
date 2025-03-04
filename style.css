@@ -7,8 +7,8 @@ body {
   color: white;
   background-color: grey;
   padding: 10px;
-  display: flex; 
-  align-items: center; 
+  display: flex;
+  align-items: center;
   justify-content: space-between;
 }
 
@@ -17,24 +17,32 @@ body {
 }
 
 .rightContent {
-  display: flex; 
-  align-items: center; 
+  display: flex;
+  align-items: center;
+}
+
+.bell {
+  width: 25px;
+  height: auto;
+  margin-right: 10px;
 }
 
 .icon1 {
-  width: 50px;
+  width: 30px;
   height: auto;
   margin-right: 10px;
 }
 
 .rightText {
   font-size: 20px;
-  color: white; 
+  color: white;
+  display: flex;
+  align-items: center;
 }
 
 
 
-.container{
+.container {
   display: flex;
 }
 
@@ -69,12 +77,12 @@ body {
 
 
 
-table{
+table {
   width: 100%;
   border-collapse: collapse;
 }
 
-th{
+th {
   border: 1px solid black;
   padding: 8px;
   text-align: center;
@@ -83,8 +91,8 @@ th{
 
 
 
-  .class1{
-    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
-    text-align: left;
-    color: aqua;
-  }
+.class1 {
+  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+  text-align: left;
+  color: aqua;
+}
