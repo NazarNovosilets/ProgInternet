@@ -12,6 +12,10 @@ body {
   justify-content: space-between;
 }
 
+
+
+
+
 .leftText {
   font-weight: bold;
 }
@@ -27,7 +31,7 @@ body {
   margin-right: 10px;
 }
 
-.icon1 {
+.icon1, .instagram, .git{
   width: 30px;
   height: auto;
   margin-right: 10px;
@@ -159,4 +163,23 @@ td {
 .pagebtn.active {
   font-weight: bold;
   background-color: #ddd;
+}
+
+.headUnd{
+  font-size: 30px;
+  color: white;
+  background-color: grey;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.rightbottom{
+  color: white;
+  background-color: grey;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
