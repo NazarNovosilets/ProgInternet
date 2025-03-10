@@ -120,8 +120,9 @@ td {
   width: 10vw;
 }
 
-.optionIcons {
-  width: 15px;
+.optionIcons, .edit-btn, .delete-btn {
+  width: 20px;  /* Задає фіксований розмір */
+  height: 20px;
   border: 1px solid black;
 }
 
@@ -196,7 +197,6 @@ td {
   align-items: center;
   justify-content: space-between;
 }
-
 
 .modal {
   display: none;

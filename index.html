@@ -87,34 +87,65 @@
     </div>
 
 
-    <div id="studentModal" class="modal">
-        <div class="modal-content">
-            <span class="close-btn">&times;</span>
-            <h2>Додати студента</h2>
-            <form id="studentForm">
-                <label for="group">Група:</label>
-                <input type="text" id="group" required><br>
-    
-                <label for="name">Ім'я:</label>
-                <input type="text" id="name" required><br>
-    
-                <label for="gender">Стать:</label>
-                <select id="gender" required>
-                    <option value="Чоловіча">Чоловіча</option>
-                    <option value="Жіноча">Жіноча</option>
-                </select><br>
-    
-                <label for="birthday">Дата народження:</label>
-                <input type="date" id="birthday" required><br>
-    
-                <label for="status">Статус:</label>
-                <input type="text" id="status"><br>
-    
-                <button type="submit">Додати</button>
-            </form>
-        </div>
+   <!-- Модальне вікно для додавання студента -->
+<div id="addStudentModal" class="modal">
+    <div class="modal-content">
+        <span class="close-btn">&times;</span>
+        <h2>Додати студента</h2>
+        <form id="addStudentForm">
+            <label for="addGroup">Група:</label>
+            <input type="text" id="addGroup" required><br>
+
+            <label for="addName">Ім'я:</label>
+            <input type="text" id="addName" required><br>
+
+            <label for="addGender">Стать:</label>
+            <select id="addGender" required>
+                <option value="Чоловіча">Чоловіча</option>
+                <option value="Жіноча">Жіноча</option>
+            </select><br>
+
+            <label for="addBirthday">Дата народження:</label>
+            <input type="date" id="addBirthday" required><br>
+
+            <label for="addStatus">Статус:</label>
+            <input type="text" id="addStatus"><br>
+
+            <button type="submit">Додати</button>
+        </form>
     </div>
-    
+</div>
+
+<!-- Модальне вікно для редагування студента -->
+<div id="editStudentModal" class="modal">
+    <div class="modal-content">
+        <span class="close-btn">&times;</span>
+        <h2>Редагувати студента</h2>
+        <form id="editStudentForm">
+            <input type="hidden" id="editRowIndex"> <!-- зберігає індекс -->
+            
+            <label for="editGroup">Група:</label>
+            <input type="text" id="editGroup" required><br>
+
+            <label for="editName">Ім'я:</label>
+            <input type="text" id="editName" required><br>
+
+            <label for="editGender">Стать:</label>
+            <select id="editGender" required>
+                <option value="Чоловіча">Чоловіча</option>
+                <option value="Жіноча">Жіноча</option>
+            </select><br>
+
+            <label for="editBirthday">Дата народження:</label>
+            <input type="date" id="editBirthday" required><br>
+
+            <label for="editStatus">Статус:</label>
+            <input type="text" id="editStatus"><br>
+
+            <button type="submit">Зберегти зміни</button>
+        </form>
+    </div>
+</div>
 
 
 
