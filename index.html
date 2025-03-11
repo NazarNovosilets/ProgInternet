@@ -11,7 +11,7 @@
     <div class="head1">
         <span class="leftText">CMS</span>
         <div class="rightContent">
-            <img src="bell.png" alt="bell" class="bell">
+            <img id="notification" src="notification.png" alt="Іконка сповіщень" onclick="changeImg()">
             <img src="icon1.png" alt="icon" class="icon1">
             <span class="rightText">Name Surname</span>
         </div>
@@ -20,13 +20,13 @@
 
     <div class="container">
         <!-- Ліве бокове меню -->
-        <aside class="sidebar">
+        <nav class="sidebar">
             <ul>
                 <li><a href="#">Dashboard</a></li>
                 <li><a href="#">Students</a></li>
                 <li><a href="#">Tasks</a></li>
             </ul>
-        </aside>
+        </nav>
 
 
         <main class="content">
@@ -35,7 +35,7 @@
             <table>
                 <thead>
                     <tr>
-                        <th> <input type="checkbox" id="myCheckbox"></th>
+                        <th> <input type="checkbox" id="headCheckbox1"></th>
                         <th> Group </th>
                         <th> Name </th>
                         <th> Gender </th>

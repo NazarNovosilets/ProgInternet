@@ -9,14 +9,12 @@ document.addEventListener("DOMContentLoaded", function () {
     const addStudentForm = document.getElementById("addStudentForm");
     const editStudentForm = document.getElementById("editStudentForm");
 
-    let currentRow = null; // Поточний студент для редагування
+    let currentRow = null;
 
-    // Відкриття вікна додавання
     openAddModalBtn.addEventListener("click", function () {
         addModal.style.display = "flex";
     });
 
-    // Закриття вікон
     closeAddModalBtn.addEventListener("click", function () {
         addModal.style.display = "none";
     });
@@ -25,7 +23,6 @@ document.addEventListener("DOMContentLoaded", function () {
         editModal.style.display = "none";
     });
 
-    // Додавання студента
     addStudentForm.addEventListener("submit", function (event) {
         event.preventDefault();
 
@@ -55,7 +52,6 @@ document.addEventListener("DOMContentLoaded", function () {
         addModal.style.display = "none";
         addStudentForm.reset();
 
-        // Додаємо обробник для кнопок редагування
         newRow.querySelector(".edit-btn").addEventListener("click", function () {
             currentRow = newRow;
             editModal.style.display = "flex";
@@ -67,13 +63,11 @@ document.addEventListener("DOMContentLoaded", function () {
             document.getElementById("editStatus").value = status;
         });
 
-        // Видалення студента
         newRow.querySelector(".delete-btn").addEventListener("click", function () {
             table.removeChild(newRow);
         });
     });
 
-    // Редагування студента
     editStudentForm.addEventListener("submit", function (event) {
         event.preventDefault();
 
@@ -86,3 +80,7 @@ document.addEventListener("DOMContentLoaded", function () {
         editModal.style.display = "none";
     });
 });
+
+function changeImg() {
+    document.getElementById("notification").src = "bell.png";
+}
