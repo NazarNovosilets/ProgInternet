@@ -99,3 +99,19 @@ document.addEventListener("DOMContentLoaded", function () {
 function changeImg() {
     document.getElementById("notification").src = "bell.png";
 }
+
+document.addEventListener("DOMContentLoaded", function () {
+    const userProfile = document.querySelector(".dropbutton");
+    const dropdownContent = document.querySelector(".dropdown-content");
+
+    userProfile.addEventListener("click", function (event) {
+        event.stopPropagation();
+        dropdownContent.style.display = dropdownContent.style.display === "block" ? "none" : "block";
+    });
+
+    document.addEventListener("click", function (event) {
+        if (!event.target.closest(".dropbutton")) {
+            dropdownContent.style.display = "none";
+        }
+    });
+});

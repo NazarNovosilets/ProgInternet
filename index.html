@@ -7,13 +7,24 @@
 </head>
 
 <body>
-
     <div class="head1">
         <span class="leftText">CMS</span>
         <div class="rightContent">
-            <img id="notification" src="notification.png" alt="Іконка сповіщень" onclick="changeImg()">
-            <img src="icon1.png" alt="icon" class="icon1">
-            <span class="rightText">Name Surname</span>
+            <div class="notification-wrapper">
+                <img id="notification" src="notification.png" alt="Іконка сповіщень" onclick="changeImg()">
+            </div>
+            <div class="dropbutton">
+                <img src="icon1.png" alt="icon" class="icon1">
+                <div class="user-profile">
+                    <span class="rightText">Name Surname</span>
+                    <div class="dropdown">
+                        <div class="dropdown-content">
+                            <a href="#">Profile</a>
+                            <a href="#">Log Out</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -75,8 +86,8 @@
     <div class="rightbottom">
         <title class="headUnd">Our Socials</title>
         <div>
-            <a href="mailto:nazar.novosilets.pz.2023@lpnu.ua">E-mail</a>
-            <p class="tel"> <a href="tel:0976442383"> 097 644 23 83</a></p>
+            <p> <a href="mailto:nazar.novosilets.pz.2023@lpnu.ua" class="mail">E-mail</a></p>
+            <p> <a href="tel:0976442383" class="tel"> 097 644 23 83</a></p>
         </div>
         <div>
             <a href="https://www.instagram.com/_nnovosilets_" target="_blank" class="Inst"><img src="instagram.png"
