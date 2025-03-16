@@ -9,8 +9,10 @@ document.addEventListener("DOMContentLoaded", function () {
     const closeDeleteModalBtn = deleteModal.querySelector(".close-btn");
     const addStudentForm = document.getElementById("addStudentForm");
     const editStudentForm = document.getElementById("editStudentForm");
-    const okButton = deleteModal.querySelector(".modal-footer button:last-child");
+    const okButton = deleteModal.querySelector(".modal-footer button:last-child"); 
     let currentRow = null;
+    let currentPage = 1;
+    const rowsPerPage = 4;
 
     function closeModal(modalId) {
         document.getElementById(modalId).style.display = "none";
@@ -37,11 +39,60 @@ document.addEventListener("DOMContentLoaded", function () {
             rowToDelete.remove();
             console.log("Student " + studentName + " deleted successfully.");
             alert("User " + studentName + " has been deleted!");
+            updatePagination();
         } else {
             console.error("No row found for student: " + studentName);
         }
 
         closeModal("deleteStudentModal");
+    }
+
+    function updatePagination() {
+        const rows = document.querySelectorAll(".studentsInfo");
+        const totalPages = Math.ceil(rows.length / rowsPerPage);
+        const startIndex = (currentPage - 1) * rowsPerPage;
+        const endIndex = startIndex + rowsPerPage;
+
+        rows.forEach((row, index) => {
+            row.style.display = (index >= startIndex && index < endIndex) ? "" : "none";
+        });
+
+        const pagination = document.querySelector(".pagination");
+        pagination.innerHTML = "";
+
+        const prevButton = document.createElement("button");
+        prevButton.className = "pagebtn";
+        prevButton.textContent = "<";
+        prevButton.addEventListener("click", () => {
+            if (currentPage > 1) {
+                currentPage--;
+                updatePagination();
+            }
+        });
+        pagination.appendChild(prevButton);
+
+        for (let i = 1; i <= totalPages; i++) {
+            const button = document.createElement("button");
+            button.className = "pagebtn";
+            button.textContent = i;
+            if (i === currentPage) button.classList.add("active");
+            button.addEventListener("click", () => {
+                currentPage = i;
+                updatePagination();
+            });
+            pagination.appendChild(button);
+        }
+
+        const nextButton = document.createElement("button");
+        nextButton.className = "pagebtn";
+        nextButton.textContent = ">";
+        nextButton.addEventListener("click", () => {
+            if (currentPage < totalPages) {
+                currentPage++;
+                updatePagination();
+            }
+        });
+        pagination.appendChild(nextButton);
     }
 
     document.querySelectorAll(".delete-btn").forEach(btn => {
@@ -73,6 +124,7 @@ document.addEventListener("DOMContentLoaded", function () {
             confirmDelete();
         });
     }
+
     window.onclick = function (event) {
         const modals = document.getElementsByClassName("modal");
         for (let modal of modals) {
@@ -142,6 +194,8 @@ document.addEventListener("DOMContentLoaded", function () {
             const studentName = newRow.cells[2].textContent.trim();
             openDeleteModal(studentName);
         });
+
+        updatePagination();
     });
 
     editStudentForm.addEventListener("submit", function (event) {
@@ -186,7 +240,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const notificationIcon = document.getElementById("notification");
     notificationIcon.addEventListener("click", function (event) {
         event.stopPropagation();
-        notificationIcon.src = "bell.png";
+        notificationIcon.src = "bell.png"; // Перевірте, чи файл bell.png існує
         setTimeout(() => {
             notificationMenu.style.display = notificationMenu.style.display === "block" ? "none" : "block";
         }, 100);
@@ -202,4 +256,6 @@ document.addEventListener("DOMContentLoaded", function () {
         `;
         dropNotification.appendChild(newMessage);
     }
+
+    updatePagination();
 });
