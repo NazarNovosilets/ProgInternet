@@ -11,7 +11,17 @@
         <span class="leftText">CMS</span>
         <div class="rightContent">
             <div class="notification-wrapper">
-                <img id="notification" src="notification.png" alt="Іконка сповіщень" onclick="changeImg()">
+                <img id="notification" title="Notification" src="notification.png" alt="Іконка сповіщень">
+                <div class="drop-notification">
+                    <div class="message">
+                        <img src="icon2.png" alt="icon" class="icon2">        
+                        <span class="messageInfo"> Hi! Can u show me ur code</span>
+                    </div>
+                     <div class="message">
+                        <img src="icon2.png" alt="icon" class="icon2">        
+                        <span class="messageInfo"> Hi! Can u show me ur code1</span>
+                    </div>
+                </div>
             </div>
             <div class="dropbutton">
                 <img src="icon1.png" alt="icon" class="icon1">
@@ -42,7 +52,7 @@
 
         <main class="content">
             <h1 class="page-title">Students</h1>
-            <img src="plus.png" alt="plus" class="plus">
+            <img src="plus.png" title="Add" alt="plus" class="plus">
             <table>
                 <thead>
                     <tr>
@@ -65,8 +75,8 @@
                         <td> 25.11.2005 </td>
                         <td></td>
                         <td>
-                            <img src="pen.png" alt="pen" class="optionIcons">
-                            <img src="close.png" alt="plus" class="optionIcons">
+                            <img src="pen.png" title="Edit" alt="pen" class="optionIcons">
+                            <img src="close.png" alt="Видалити" class="delete-btn">
                         </td>
                     </tr>
                 </tbody>
@@ -80,6 +90,22 @@
                         <button class="pagebtn">></button>
             </div>
         </main>
+    </div>
+
+    <div id="deleteStudentModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Warning</h2>
+                <span class="close-btn" onclick="closeModal('deleteStudentModal')">×</span>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete user <span id="deleteStudentName"></span>?</p>
+            </div>
+            <div class="modal-footer">
+                <button onclick="closeModal('deleteStudentModal')">Cancel</button>
+                <button onclick="confirmDelete()">Ok</button>
+            </div>
+        </div>
     </div>
 
 
