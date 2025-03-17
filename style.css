@@ -209,15 +209,6 @@ td {
   border: 1px solid black;
 }
 
-.optionIcons:hover {
-  background-color: lightgray;
-}
-
-.optionIcons:active {
-  font-weight: bold;
-  background-color: #ddd;
-}
-
 .plus {
   width: 15px;
   border: 1px solid black;
@@ -229,11 +220,11 @@ td {
   margin-right: 30px;
 }
 
-.plus:hover {
+.plus:hover, .optionIcons:hover, .delete-btn:hover {
   background-color: lightgray;
 }
 
-.plus:active {
+.plus:active, .optionIcons:active, .delete-btn:active {
   font-weight: bold;
   background-color: #ddd;
 }
@@ -281,7 +272,6 @@ td {
   justify-content: space-between;
 }
 
-/* Модальні вікна */
 .modal {
   display: none;
   position: fixed;
@@ -352,7 +342,6 @@ td {
   background-color: #e0e0e0;
 }
 
-/* Стилі для форм у модальних вікнах */
 .modal-content form {
   display: flex;
   flex-direction: column;

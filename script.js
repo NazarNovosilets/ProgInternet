@@ -1,5 +1,4 @@
 document.addEventListener("DOMContentLoaded", function () {
-    // Модальні вікна для додавання, редагування та видалення студентів
     const addModal = document.getElementById("addStudentModal");
     const editModal = document.getElementById("editStudentModal");
     const deleteModal = document.getElementById("deleteStudentModal");
@@ -154,7 +153,6 @@ document.addEventListener("DOMContentLoaded", function () {
         const surname = document.getElementById("addSurname").value;
         const gender = document.getElementById("addGender").value;
         const birthday = document.getElementById("addBirthday").value;
-        const status = document.getElementById("addStatus").value || "—";
 
         const table = document.querySelector("tbody");
         const newRow = document.createElement("tr");
@@ -166,12 +164,17 @@ document.addEventListener("DOMContentLoaded", function () {
             <td>${name} ${surname}</td>
             <td>${gender}</td>
             <td>${birthday.split("-").reverse().join(".")}</td>
-            <td>${status}</td>
+            <td><input type ="radio" class="status"></td>
             <td>
-                <img src="pen.png" alt="Редагувати" class="edit-btn">
-                <img src="close.png" alt="Видалити" class="delete-btn">
+                <img src="pen.png" alt="Редагувати" title="Edit" class="edit-btn">
+                <img src="close.png" alt="Видалити" title="Delete" class="delete-btn">
             </td>
         `;
+
+        var namefromHTML = document.querySelector(".rightText").textContent.split(" ");
+        if(name===namefromHTML[0] && surname === namefromHTML[1]){
+            newRow.querySelector(".status").checked = true;
+        }
 
         table.appendChild(newRow);
         addModal.style.display = "none";
@@ -205,7 +208,6 @@ document.addEventListener("DOMContentLoaded", function () {
         currentRow.cells[2].innerText = fullName.trim();
         currentRow.cells[3].innerText = document.getElementById("editGender").value;
         currentRow.cells[4].innerText = document.getElementById("editBirthday").value.split("-").reverse().join(".");
-        currentRow.cells[5].innerText = document.getElementById("editStatus").value;
         editModal.style.display = "none";
     });
 
@@ -240,7 +242,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const notificationIcon = document.getElementById("notification");
     notificationIcon.addEventListener("click", function (event) {
         event.stopPropagation();
-        notificationIcon.src = "bell.png"; // Перевірте, чи файл bell.png існує
+        notificationIcon.src = "bell.png";
         setTimeout(() => {
             notificationMenu.style.display = notificationMenu.style.display === "block" ? "none" : "block";
         }, 100);
