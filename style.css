@@ -139,6 +139,7 @@ body {
 
 .container {
   display: flex;
+  margin-bottom: 200px;
 }
 
 .sidebar {
@@ -220,11 +221,11 @@ td {
   margin-right: 30px;
 }
 
-.plus:hover, .optionIcons:hover, .delete-btn:hover {
+.plus:hover, .optionIcons:hover, .delete-btn:hover, .edit-btn:hover {
   background-color: lightgray;
 }
 
-.plus:active, .optionIcons:active, .delete-btn:active {
+.plus:active, .optionIcons:active, .delete-btn:active, .edit-btn:active {
   font-weight: bold;
   background-color: #ddd;
 }
@@ -369,4 +370,67 @@ td {
 
 .modal-content button[type="submit"]:hover {
   background-color: #45a049;
+}
+
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    height: auto;
+    padding: 10px;
+    background-color: #f8f8f8;
+    overflow-x: auto;
+    white-space: nowrap; 
+  }
+
+  .sidebar ul {
+    display: flex;
+    width: auto;
+    margin: 0;
+    padding: 0;
+  }
+
+  .sidebar ul li {
+    display: inline-block;
+    margin: 0 5px;
+    padding: 8px;
+    min-width: fit-content;
+  }
+
+  .sidebar ul li a {
+    font-size: 14px;
+  }
+
+  table {
+    max-width: 100%;
+    margin-right: 0;
+  }
+
+  .head1 {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .rightContent {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .studentsInfo {
+    width: 100%;
+  }
+
+  th, td {
+    padding: 0.25rem;
+    font-size: clamp(12px, 2vw, 14px);
+  }
+
+  .modal-content {
+    width: 90vw;
+  }
 }

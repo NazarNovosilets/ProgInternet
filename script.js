@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const closeDeleteModalBtn = deleteModal.querySelector(".close-btn");
     const addStudentForm = document.getElementById("addStudentForm");
     const editStudentForm = document.getElementById("editStudentForm");
-    const okButton = deleteModal.querySelector(".modal-footer button:last-child"); 
+    const okButton = deleteModal.querySelector(".modal-footer button:last-child");
     let currentRow = null;
     let currentPage = 1;
     const rowsPerPage = 4;
@@ -39,10 +39,7 @@ document.addEventListener("DOMContentLoaded", function () {
             console.log("Student " + studentName + " deleted successfully.");
             alert("User " + studentName + " has been deleted!");
             updatePagination();
-        } else {
-            console.error("No row found for student: " + studentName);
         }
-
         closeModal("deleteStudentModal");
     }
 
@@ -94,17 +91,46 @@ document.addEventListener("DOMContentLoaded", function () {
         pagination.appendChild(nextButton);
     }
 
-    document.querySelectorAll(".delete-btn").forEach(btn => {
-        btn.addEventListener("click", () => {
-            const row = btn.closest("tr");
-            if (row) {
-                const studentName = row.cells[2].textContent.trim();
-                console.log("Opening delete modal for: " + studentName);
-                openDeleteModal(studentName);
-            } else {
-                console.error("No row found for delete button click.");
-            }
+    function attachEventListeners() {
+        document.querySelectorAll(".delete-btn").forEach(btn => {
+            btn.removeEventListener('click', handleDeleteClick);
+            btn.addEventListener('click', handleDeleteClick);
         });
+
+        document.querySelectorAll(".edit-btn").forEach(btn => {
+            btn.removeEventListener('click', handleEditClick);
+            btn.addEventListener('click', handleEditClick);
+        });
+    }
+
+    function handleDeleteClick() {
+        const row = this.closest("tr");
+        if (row) {
+            const studentName = row.cells[2].textContent.trim();
+            openDeleteModal(studentName);
+        }
+    }
+
+    function handleEditClick() {
+        currentRow = this.closest("tr");
+        editModal.style.display = "flex";
+        document.getElementById("editGroup").value = currentRow.cells[1].innerText;
+        let fullName = currentRow.cells[2].innerText.trim().split(" ");
+        document.getElementById("editName").value = fullName[0] || "";
+        document.getElementById("editSurname").value = fullName.slice(1).join(" ") || "";
+        document.getElementById("editGender").value = currentRow.cells[3].innerText;
+        let dateParts = currentRow.cells[4].innerText.split(".");
+        document.getElementById("editBirthday").value = `${dateParts[2]}-${dateParts[1]}-${dateParts[0]}`;
+        document.getElementById("editStatus").checked = currentRow.querySelector('.status').checked;
+    }
+
+    document.addEventListener('click', (e) => {
+        if (e.target.classList.contains('delete-btn')) {
+            handleDeleteClick.call(e.target);
+        }
+        if (e.target.classList.contains('edit-btn')) {
+            handleEditClick.call(e.target);
+        }
     });
 
     closeDeleteModalBtn.addEventListener("click", function () {
@@ -164,7 +190,7 @@ document.addEventListener("DOMContentLoaded", function () {
             <td>${name} ${surname}</td>
             <td>${gender}</td>
             <td>${birthday.split("-").reverse().join(".")}</td>
-            <td><input type ="radio" class="status"></td>
+            <td><input type="radio" class="status"></td>
             <td>
                 <img src="pen.png" alt="Редагувати" title="Edit" class="edit-btn">
                 <img src="close.png" alt="Видалити" title="Delete" class="delete-btn">
@@ -172,34 +198,42 @@ document.addEventListener("DOMContentLoaded", function () {
         `;
 
         var namefromHTML = document.querySelector(".rightText").textContent.split(" ");
-        if(name===namefromHTML[0] && surname === namefromHTML[1]){
+        if(name === namefromHTML[0] && surname === namefromHTML[1]) {
             newRow.querySelector(".status").checked = true;
         }
 
         table.appendChild(newRow);
         addModal.style.display = "none";
         addStudentForm.reset();
-
-        newRow.querySelector(".edit-btn").addEventListener("click", function () {
-            currentRow = newRow;
-            editModal.style.display = "flex";
-            document.getElementById("editGroup").value = currentRow.cells[1].innerText;
-            let fullName = currentRow.cells[2].innerText.trim().split(" ");
-            document.getElementById("editName").value = fullName[0] || "";
-            document.getElementById("editSurname").value = fullName.slice(1).join(" ") || "";
-            document.getElementById("editGender").value = currentRow.cells[3].innerText;
-            let dateParts = currentRow.cells[4].innerText.split(".");
-            document.getElementById("editBirthday").value = `${dateParts[2]}-${dateParts[1]}-${dateParts[0]}`;
-            document.getElementById("editStatus").value = currentRow.cells[5].innerText;
-        });
-
-        newRow.querySelector(".delete-btn").addEventListener("click", function () {
-            const studentName = newRow.cells[2].textContent.trim();
-            openDeleteModal(studentName);
-        });
-
+        
         updatePagination();
+        attachEventListeners();
     });
+
+    editStudentForm.addEventListener("submit", function (event) {
+        event.preventDefault();
+        if (currentRow) {
+            const group = document.getElementById("editGroup").value;
+            const name = document.getElementById("editName").value;
+            const surname = document.getElementById("editSurname").value;
+            const gender = document.getElementById("editGender").value;
+            const birthday = document.getElementById("editBirthday").value;
+            const status = document.getElementById("editStatus").checked;
+
+            currentRow.cells[1].innerText = group;
+            currentRow.cells[2].innerText = `${name} ${surname}`;
+            currentRow.cells[3].innerText = gender;
+            currentRow.cells[4].innerText = birthday.split("-").reverse().join(".");
+            currentRow.querySelector('.status').checked = status;
+
+            editModal.style.display = "none";
+            editStudentForm.reset();
+            currentRow = null;
+        }
+    });
+
+    updatePagination();
+    attachEventListeners();
 
     editStudentForm.addEventListener("submit", function (event) {
         event.preventDefault();
@@ -247,17 +281,5 @@ document.addEventListener("DOMContentLoaded", function () {
             notificationMenu.style.display = notificationMenu.style.display === "block" ? "none" : "block";
         }, 100);
     });
-
-    function addNotification(avatarSrc, text) {
-        const dropNotification = document.querySelector(".drop-notification");
-        const newMessage = document.createElement("div");
-        newMessage.className = "message";
-        newMessage.innerHTML = `
-            <img src="${avatarSrc}" alt="avatar" class="icon2">
-            <span class="messageInfo">${text}</span>
-        `;
-        dropNotification.appendChild(newMessage);
-    }
-
     updatePagination();
 });
