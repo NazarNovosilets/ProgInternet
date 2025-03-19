@@ -13,34 +13,69 @@ document.addEventListener("DOMContentLoaded", function () {
     let currentPage = 1;
     const rowsPerPage = 4;
 
+    const headerCheckbox = document.querySelector('thead input[type="checkbox"]');
+    headerCheckbox.addEventListener('change', function() {
+        const allCheckboxes = document.querySelectorAll('.studentsInfo input[type="checkbox"]');
+        allCheckboxes.forEach(checkbox => {
+            checkbox.checked = this.checked;
+        });
+        updateButtonStates();
+    });
+
+    document.addEventListener('change', function(e) {
+        if (e.target.type === 'checkbox' && e.target.closest('.studentsInfo')) {
+            updateButtonStates();
+        }
+    });
+
+    function updateButtonStates() {
+        const checkedBoxes = document.querySelectorAll('.studentsInfo input[type="checkbox"]:checked');
+        const editButtons = document.querySelectorAll('.edit-btn');
+        const deleteButtons = document.querySelectorAll('.delete-btn');
+
+        editButtons.forEach(btn => btn.disabled = true);
+        deleteButtons.forEach(btn => btn.disabled = true);
+
+        if (checkedBoxes.length === 1) {
+            const selectedRow = checkedBoxes[0].closest('tr');
+            selectedRow.querySelector('.edit-btn').disabled = false;
+            selectedRow.querySelector('.delete-btn').disabled = false;
+        } else if (checkedBoxes.length > 0) {
+            deleteButtons.forEach(btn => btn.disabled = false);
+        }
+    }
+
     function closeModal(modalId) {
         document.getElementById(modalId).style.display = "none";
     }
 
-    function openDeleteModal(studentName) {
-        document.getElementById("deleteStudentName").textContent = studentName;
+    function openDeleteModal(studentNames) {
+        document.getElementById("deleteStudentName").textContent = studentNames;
         document.getElementById("deleteStudentModal").style.display = "flex";
     }
 
     function confirmDelete() {
-        const studentName = document.getElementById("deleteStudentName").textContent.trim();
-        const rows = document.querySelectorAll(".studentsInfo");
-        let rowToDelete = null;
+        const checkedBoxes = document.querySelectorAll('.studentsInfo input[type="checkbox"]:checked');
+        
+        if (checkedBoxes.length === 0) {
+            alert("Please enter student for remove!");
+            closeModal("deleteStudentModal");
+            return;
+        }
 
-        rows.forEach(row => {
-            const nameCell = row.cells[2].textContent.trim();
-            if (nameCell === studentName) {
-                rowToDelete = row;
-            }
+        const deletedNames = [];
+        checkedBoxes.forEach(checkbox => {
+            const row = checkbox.closest('tr');
+            deletedNames.push(row.cells[2].textContent.trim());
+            row.remove();
         });
 
-        if (rowToDelete) {
-            rowToDelete.remove();
-            console.log("Student " + studentName + " deleted successfully.");
-            alert("User " + studentName + " has been deleted!");
-            updatePagination();
-        }
+        headerCheckbox.checked = false;
+        alert(`Chosen students was removed!`);
+        
         closeModal("deleteStudentModal");
+        updatePagination();
+        updateButtonStates();
     }
 
     function updatePagination() {
@@ -89,29 +124,38 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         });
         pagination.appendChild(nextButton);
+        updateButtonStates();
     }
 
     function attachEventListeners() {
         document.querySelectorAll(".delete-btn").forEach(btn => {
             btn.removeEventListener('click', handleDeleteClick);
-            btn.addEventListener('click', handleDeleteClick);
         });
 
         document.querySelectorAll(".edit-btn").forEach(btn => {
             btn.removeEventListener('click', handleEditClick);
-            btn.addEventListener('click', handleEditClick);
         });
     }
 
     function handleDeleteClick() {
-        const row = this.closest("tr");
-        if (row) {
-            const studentName = row.cells[2].textContent.trim();
-            openDeleteModal(studentName);
+        const checkedBoxes = document.querySelectorAll('.studentsInfo input[type="checkbox"]:checked');
+        if (checkedBoxes.length === 0) {
+            alert("Please, enter student for remove!");
+            return;
         }
+
+        const studentNames = Array.from(checkedBoxes).map(checkbox => 
+            checkbox.closest('tr').cells[2].textContent.trim()
+        ).join(", ");
+        openDeleteModal(studentNames);
     }
 
     function handleEditClick() {
+        const checkedBoxes = document.querySelectorAll('.studentsInfo input[type="checkbox"]:checked');
+        if (checkedBoxes.length === 0) {
+            alert("Please, enter student for edit!");
+            return;
+        }
         currentRow = this.closest("tr");
         editModal.style.display = "flex";
         document.getElementById("editGroup").value = currentRow.cells[1].innerText;
@@ -198,7 +242,7 @@ document.addEventListener("DOMContentLoaded", function () {
         `;
 
         var namefromHTML = document.querySelector(".rightText").textContent.split(" ");
-        if(name === namefromHTML[0] && surname === namefromHTML[1]) {
+        if (name === namefromHTML[0] && surname === namefromHTML[1]) {
             newRow.querySelector(".status").checked = true;
         }
 
@@ -281,5 +325,8 @@ document.addEventListener("DOMContentLoaded", function () {
             notificationMenu.style.display = notificationMenu.style.display === "block" ? "none" : "block";
         }, 100);
     });
+
     updatePagination();
+    attachEventListeners();
+    updateButtonStates();
 });
