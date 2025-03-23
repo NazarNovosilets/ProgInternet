@@ -4,6 +4,7 @@
 <head>
     <title>Page Title</title>
     <link href="style.css" rel="stylesheet" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 
 <body>
@@ -71,7 +72,7 @@
                         <td> <input type="checkbox" id="myCheckbox"> </td>
                         <td> PZ-24 </td>
                         <td> Nazar Novosilets</td>
-                        <td> Male </td>
+                        <td> Man </td>
                         <td> 25.11.2005 </td>
                         <td><input type="radio" class="status"></td>
                         <td>
@@ -103,7 +104,7 @@
 
 
     <div class="rightbottom">
-        <title class="headUnd">Our Socials</title>
+        <h2 class="headUnd">Our Socials</h2>
         <div>
             <p> <a href="mailto:nazar.novosilets.pz.2023@lpnu.ua" class="mail">E-mail</a></p>
             <p> <a href="tel:0976442383" class="tel"> 097 644 23 83</a></p>
@@ -120,31 +121,32 @@
 <div id="addStudentModal" class="modal">
     <div class="modal-content">
         <span class="close-btn">&times;</span>
-        <h2>Додати студента</h2>
+        <h2>Add student</h2>
         <form id="addStudentForm">
-            <label for="addGroup">Група:</label>
+            <label for="addGroup">Group:</label>
             <select id="addGroup" required>
-                <!--<option value="Select group">Select group</option>-->
+                <option value="">Select group</option>
                 <option value="Group1">Group 1</option>
                 <option value="Group2">Group 2</option>
             </select><br>
 
-            <label for="addName">Ім'я:</label>
+            <label for="addName">Name:</label>
             <input type="text" id="addName" required><br>
 
-            <label for="addSurname">Прізвище:</label>
+            <label for="addSurname">Surname:</label>
             <input type="text" id="addSurname" required><br>
 
-            <label for="addGender">Стать:</label>
+            <label for="addGender">Gender:</label>
             <select id="addGender" required>
-                <option value="Чоловіча">Чоловіча</option>
-                <option value="Жіноча">Жіноча</option>
+                <option value="">Select gender</option>
+                <option value="Man">Man</option>
+                <option value="Woman">Woman</option>
             </select><br>
 
-            <label for="addBirthday">Дата народження:</label>
+            <label for="addBirthday">Birthday:</label>
             <input type="date" id="addBirthday" required><br>
 
-            <button type="submit">Додати</button>
+            <button type="submit">Add</button>
         </form>
     </div>
 </div>
@@ -152,32 +154,32 @@
 <div id="editStudentModal" class="modal">
     <div class="modal-content">
         <span class="close-btn">&times;</span>
-        <h2>Редагувати студента</h2>
+        <h2>Edit student</h2>
         <form id="editStudentForm">
             <input type="hidden" id="editRowIndex">
             
-            <label for="editGroup">Група:</label>
+            <label for="editGroup">Group:</label>
             <select id="editGroup" required>
                 <option value="Group1">Group 1</option>
                 <option value="Group2">Group 2</option>
             </select><br>
 
-            <label for="editName">Ім'я:</label>
+            <label for="editName">Name:</label>
             <input type="text" id="editName" required><br>
 
-            <label for="editSurname">Прізвище:</label>
+            <label for="editSurname">Surname:</label>
             <input type="text" id="editSurname" required><br>
 
-            <label for="editGender">Стать:</label>
+            <label for="editGender">Gender:</label>
             <select id="editGender" required>
-                <option value="Чоловіча">Чоловіча</option>
-                <option value="Жіноча">Жіноча</option>
+                <option value="Man">Man</option>
+                <option value="Woman">Woman</option>
             </select><br>
 
-            <label for="editBirthday">Дата народження:</label>
+            <label for="editBirthday">Birthday:</label>
             <input type="date" id="editBirthday" required><br>
 
-            <button type="submit">Зберегти зміни</button>
+            <button type="submit">Submit</button>
         </form>
     </div>
 </div>

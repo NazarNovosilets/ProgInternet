@@ -227,6 +227,8 @@ document.addEventListener("DOMContentLoaded", function () {
         const table = document.querySelector("tbody");
         const newRow = document.createElement("tr");
 
+
+
         newRow.classList.add("studentsInfo");
         newRow.innerHTML = `
             <td><input type="checkbox"></td>
