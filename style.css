@@ -442,4 +442,8 @@ td {
     width: 100%;
     margin: 0;
   }
+  .rightbottom{
+    position: fixed;
+    bottom: 0;
+  }
 }

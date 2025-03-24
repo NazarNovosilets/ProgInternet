@@ -9,10 +9,10 @@
 
 <body>
     <div class="head1">
-        <span class="leftText">CMS</span>
+        <a href="/" style="color: black; text-decoration: none;"><span class="leftText">CMS</span></a>
         <div class="rightContent">
             <div class="notification-wrapper">
-                <img id="notification" title="Notification" src="notification.png" alt="Іконка сповіщень">
+                <a href="message.html"><img id="notification" title="Notification" src="notification.png" alt="Іконка сповіщень"></a>
                 <div class="drop-notification">
                     <div class="message">
                         <img src="icon2.png" alt="icon" class="icon2">        
@@ -57,7 +57,7 @@
             <table>
                 <thead>
                     <tr>
-                        <th> <input type="checkbox" id="headCheckbox1"></th>
+                        <th> <input type="checkbox" id="headCheckbox1"><label style="visibility: hidden;" for="headCheckbox1">t</label></th>
                         <th> Group </th>
                         <th> Name </th>
                         <th> Gender </th>
@@ -69,12 +69,12 @@
 
                 <tbody>
                     <tr class="studentsInfo">
-                        <td> <input type="checkbox" id="myCheckbox"> </td>
+                        <td> <input type="checkbox" id="myCheckbox"><label style="visibility: hidden;" for="myCheckbox" class="lab">t</label></td>
                         <td> PZ-24 </td>
                         <td> Nazar Novosilets</td>
-                        <td> Man </td>
+                        <td> Male </td>
                         <td> 25.11.2005 </td>
-                        <td><input type="radio" class="status"></td>
+                        <td><input type="radio" class="status" id="status"><label style="visibility: hidden;" for="status">t</label></td>
                         <td>
                             <img src="pen.png" title="Edit" alt="pen" class="edit-btn">
                             <img src="close.png" title="Delete" alt="Видалити" class="delete-btn">
@@ -139,8 +139,8 @@
             <label for="addGender">Gender:</label>
             <select id="addGender" required>
                 <option value="">Select gender</option>
-                <option value="Man">Man</option>
-                <option value="Woman">Woman</option>
+                <option value="Man">Male</option>
+                <option value="Woman">Female</option>
             </select><br>
 
             <label for="addBirthday">Birthday:</label>
@@ -172,8 +172,8 @@
 
             <label for="editGender">Gender:</label>
             <select id="editGender" required>
-                <option value="Man">Man</option>
-                <option value="Woman">Woman</option>
+                <option value="Man">Male</option>
+                <option value="Woman">Female</option>
             </select><br>
 
             <label for="editBirthday">Birthday:</label>

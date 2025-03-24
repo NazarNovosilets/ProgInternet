@@ -215,6 +215,7 @@ document.addEventListener("DOMContentLoaded", function () {
         editModal.style.display = "none";
     });
 
+    var i = 0;
     addStudentForm.addEventListener("submit", function (event) {
         event.preventDefault();
 
@@ -227,16 +228,14 @@ document.addEventListener("DOMContentLoaded", function () {
         const table = document.querySelector("tbody");
         const newRow = document.createElement("tr");
 
-
-
         newRow.classList.add("studentsInfo");
         newRow.innerHTML = `
-            <td><input type="checkbox"></td>
+            <td><input type="checkbox" id="check${i}"><label style="visibility: hidden;" for="check${i}">t</label></td>
             <td>${group}</td>
             <td>${name} ${surname}</td>
             <td>${gender}</td>
             <td>${birthday.split("-").reverse().join(".")}</td>
-            <td><input type="radio" class="status"></td>
+            <td><input type="radio" class="status" id="status${i}"><label style="visibility: hidden;" for="status${i}">as</label></td>
             <td>
                 <img src="pen.png" alt="Редагувати" title="Edit" class="edit-btn">
                 <img src="close.png" alt="Видалити" title="Delete" class="delete-btn">
@@ -247,6 +246,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if (name === namefromHTML[0] && surname === namefromHTML[1]) {
             newRow.querySelector(".status").checked = true;
         }
+        i++;
 
         table.appendChild(newRow);
         addModal.style.display = "none";
@@ -308,9 +308,12 @@ document.addEventListener("DOMContentLoaded", function () {
     const notificationWrapper = document.querySelector(".notification-wrapper");
     const notificationMenu = document.querySelector(".drop-notification");
 
-    notificationWrapper.addEventListener("click", function (event) {
-        event.stopPropagation();
-        notificationMenu.style.display = notificationMenu.style.display === "block" ? "none" : "block";
+    notificationWrapper.addEventListener("mouseenter", function () {
+        notificationMenu.style.display = "block";
+    });
+    
+    notificationWrapper.addEventListener("mouseleave", function () {
+        notificationMenu.style.display = "none";
     });
 
     document.addEventListener("click", function (event) {
@@ -318,15 +321,31 @@ document.addEventListener("DOMContentLoaded", function () {
             notificationMenu.style.display = "none";
         }
     });
-
-    const notificationIcon = document.getElementById("notification");
-    notificationIcon.addEventListener("click", function (event) {
-        event.stopPropagation();
-        notificationIcon.src = "bell.png";
-        setTimeout(() => {
-            notificationMenu.style.display = notificationMenu.style.display === "block" ? "none" : "block";
-        }, 100);
+    
+    let notificationBell = document.getElementById("notification");
+    
+    const defaultSrc = "notification.png";
+    const newSrc = "bell.png";
+    
+    const savedImage = sessionStorage.getItem("bellIconSrc") || defaultSrc;
+    notificationBell.src = savedImage;
+    
+    notificationBell.addEventListener("click", function () {
+        notificationBell.src = newSrc;
+        sessionStorage.setItem("bellIconSrc", newSrc); 
+    
+        window.location.href = "/messages.html";
     });
+    
+
+    // const notificationIcon = document.getElementById("notification");
+    // notificationIcon.addEventListener("click", function (event) {
+    //     event.stopPropagation();
+    //     notificationIcon.src = "bell.png";
+    //     setTimeout(() => {
+    //         notificationMenu.style.display = notificationMenu.style.display === "block" ? "none" : "block";
+    //     }, 100);
+    // });
 
     updatePagination();
     attachEventListeners();
