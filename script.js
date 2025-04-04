@@ -1,20 +1,143 @@
 document.addEventListener("DOMContentLoaded", function () {
-    const addModal = document.getElementById("addStudentModal");
-    const editModal = document.getElementById("editStudentModal");
+    const studentModal = document.getElementById("studentModal");
     const deleteModal = document.getElementById("deleteStudentModal");
     const openAddModalBtn = document.querySelector(".plus");
-    const closeAddModalBtn = addModal.querySelector(".close-btn");
-    const closeEditModalBtn = editModal.querySelector(".close-btn");
+    const closeStudentModalBtn = studentModal.querySelector(".close-btn");
     const closeDeleteModalBtn = deleteModal.querySelector(".close-btn");
-    const addStudentForm = document.getElementById("addStudentForm");
-    const editStudentForm = document.getElementById("editStudentForm");
+    const studentForm = document.getElementById("studentForm");
+    const modalTitle = document.getElementById("modalTitle");
+    const headerCheckbox = document.querySelector('thead input[type="checkbox"]');
     const okButton = deleteModal.querySelector(".modal-footer button:last-child");
     let currentRow = null;
+    let isEditing = false;
     let currentPage = 1;
     const rowsPerPage = 4;
 
-    const headerCheckbox = document.querySelector('thead input[type="checkbox"]');
-    headerCheckbox.addEventListener('change', function() {
+    function validateName(name) {
+        const nameRegex = /^[A-ZА-ЯІЇЄҐ][a-zA-Zа-яА-ЯіїєґІЇЄҐ'-]{1,}$/;
+        if (isEmail(name)) {
+            return false;
+        }
+        return nameRegex.test(name);
+    }
+
+    function isEmail(value) {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(value);
+    }
+
+    function validateBirthday(birthday) {
+        const birthdayDate = new Date(birthday);
+        const today = new Date();
+        const age = today.getFullYear() - birthdayDate.getFullYear();
+        const monthDiff = today.getMonth() - birthdayDate.getMonth();
+        const adjustedAge = monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthdayDate.getDate())
+            ? age - 1 : age;
+        return !isNaN(birthdayDate) && adjustedAge >= 16 && adjustedAge <= 100;
+    }
+
+    function validateGroup(group) {
+        const groupRegex = /^[A-Za-zА-Яа-я0-9-]{2,}$/;
+        return groupRegex.test(group);
+    }
+
+    function displayValidationError(fieldId, errorMessage) {
+        const field = document.getElementById(fieldId);
+        const errorElement = document.getElementById(`${fieldId}Error`) || document.createElement("span");
+        if (!errorElement.id) {
+            errorElement.id = `${fieldId}Error`;
+            errorElement.className = "error-message";
+            field.parentNode.insertBefore(errorElement, field.nextSibling);
+        }
+        errorElement.textContent = errorMessage;
+        field.classList.add("error-input");
+    }
+
+    function clearValidationErrors() {
+        document.querySelectorAll(".error-message").forEach(el => el.remove());
+        document.querySelectorAll(".error-input").forEach(el => el.classList.remove("error-input"));
+    }
+
+    function validateField(fieldId, validationFunction, errorMessage) {
+        const field = document.getElementById(fieldId);
+        if (!validationFunction(field.value.trim())) {
+            displayValidationError(fieldId, errorMessage);
+        } else {
+            const errorElement = document.getElementById(`${fieldId}Error`);
+            if (errorElement) errorElement.remove();
+            field.classList.remove("error-input");
+        }
+    }
+
+    document.getElementById("studentGroup").addEventListener("input", function() {
+        validateField("studentGroup", validateGroup, "Група повинна містити щонайменше 2 символи!");
+    });
+
+    document.getElementById("studentName").addEventListener("input", function() {
+        const value = this.value.trim();
+        if (isEmail(value)) {
+            displayValidationError("studentName", "Будь ласка, введіть ім'я, а не email!");
+        } else {
+            validateField("studentName", validateName, "Ім'я повинно починатися з великої літери та не містити цифр!");
+        }
+    });
+
+    document.getElementById("studentSurname").addEventListener("input", function() {
+        validateField("studentSurname", validateName, "Прізвище повинно починатися з великої літери та не містити цифр!");
+    });
+
+    document.getElementById("studentBirthday").addEventListener("input", function() {
+        validateField("studentBirthday", validateBirthday, "Вік студента повинен бути між 16 і 100 роками!");
+    });
+
+    function validateForm() {
+        clearValidationErrors();
+        const group = document.getElementById("studentGroup").value.trim();
+        const name = document.getElementById("studentName").value.trim();
+        const surname = document.getElementById("studentSurname").value.trim();
+        const gender = document.getElementById("studentGender").value;
+        const birthday = document.getElementById("studentBirthday").value;
+
+        if (!group || !name || !surname || !gender || !birthday) {
+            alert("Будь ласка, заповніть усі обов'язкові поля!");
+            return false;
+        }
+
+        if (!validateGroup(group)) {
+            displayValidationError("studentGroup", "Група повинна містити щонайменше 2 символи!");
+            return false;
+        }
+
+        if (isEmail(name)) {
+            displayValidationError("studentName", "Будь ласка, введіть ім'я, а не email!");
+            return false;
+        }
+
+        if (!validateName(name)) {
+            displayValidationError("studentName", "Ім'я повинно починатися з великої літери та не містити цифр!");
+            return false;
+        }
+
+        if(document.getElementById('studentName').value.trim().toLowerCase() === "select" || document.getElementById('studentSurname').value.trim().toLowerCase() === "select")
+            {
+                displayValidationError("studentName","You cannot input this, you may be a thief");
+                return;
+            }
+
+        if (!validateName(surname)) {
+            displayValidationError("studentSurname", "Прізвище повинно починатися з великої літери та не містити цифр!");
+            return false;
+        }
+
+        if (!validateBirthday(birthday)) {
+            displayValidationError("studentBirthday", "Вік студента повинен бути між 16 і 100 роками!");
+            return false;
+        }
+
+        return true;
+    }
+
+    headerCheckbox.addEventListener('change', function () {
         const allCheckboxes = document.querySelectorAll('.studentsInfo input[type="checkbox"]');
         allCheckboxes.forEach(checkbox => {
             checkbox.checked = this.checked;
@@ -22,7 +145,7 @@ document.addEventListener("DOMContentLoaded", function () {
         updateButtonStates();
     });
 
-    document.addEventListener('change', function(e) {
+    document.addEventListener('change', function (e) {
         if (e.target.type === 'checkbox' && e.target.closest('.studentsInfo')) {
             updateButtonStates();
         }
@@ -33,16 +156,8 @@ document.addEventListener("DOMContentLoaded", function () {
         const editButtons = document.querySelectorAll('.edit-btn');
         const deleteButtons = document.querySelectorAll('.delete-btn');
 
-        editButtons.forEach(btn => btn.disabled = true);
-        deleteButtons.forEach(btn => btn.disabled = true);
-
-        if (checkedBoxes.length === 1) {
-            const selectedRow = checkedBoxes[0].closest('tr');
-            selectedRow.querySelector('.edit-btn').disabled = false;
-            selectedRow.querySelector('.delete-btn').disabled = false;
-        } else if (checkedBoxes.length > 0) {
-            deleteButtons.forEach(btn => btn.disabled = false);
-        }
+        editButtons.forEach(btn => btn.disabled = checkedBoxes.length !== 1);
+        deleteButtons.forEach(btn => btn.disabled = checkedBoxes.length === 0);
     }
 
     function closeModal(modalId) {
@@ -51,35 +166,54 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function openDeleteModal(studentNames) {
         document.getElementById("deleteStudentName").textContent = studentNames;
-        document.getElementById("deleteStudentModal").style.display = "flex";
+        deleteModal.style.display = "flex";
+    }
+
+    function serializeStudentData(group, name, surname, gender, birthday, status, id = null) {
+        return {
+            id: id || Date.now().toString(),
+            group: group,
+            firstName: name,
+            lastName: surname,
+            gender: gender,
+            birthday: birthday,
+            status: status ? "Online" : "Offline"
+        };
+    }
+
+    function sendToServer(studentData, action = "add") {
+        console.log(`Sending to server (${action}):`, JSON.stringify(studentData, null, 2));
     }
 
     function confirmDelete() {
         const checkedBoxes = document.querySelectorAll('.studentsInfo input[type="checkbox"]:checked');
-        
         if (checkedBoxes.length === 0) {
-            alert("Please enter student for remove!");
+            alert("Будь ласка, виберіть студента для видалення!");
             closeModal("deleteStudentModal");
             return;
         }
 
-        const deletedNames = [];
         checkedBoxes.forEach(checkbox => {
             const row = checkbox.closest('tr');
-            deletedNames.push(row.cells[2].textContent.trim());
+            const studentData = {
+                id: row.dataset.id || null,
+                fullName: row.cells[2].textContent.trim()
+            };
+            sendToServer(studentData, "delete");
             row.remove();
         });
 
         headerCheckbox.checked = false;
-        alert(`Chosen students was removed!`);
-        
+        alert(`Вибраних студентів видалено!`);
         closeModal("deleteStudentModal");
         updatePagination();
         updateButtonStates();
     }
 
     function updatePagination() {
-        const rows = document.querySelectorAll(".studentsInfo");
+ 
+   
+ const rows = document.querySelectorAll(".studentsInfo");
         const totalPages = Math.ceil(rows.length / rowsPerPage);
         const startIndex = (currentPage - 1) * rowsPerPage;
         const endIndex = startIndex + rowsPerPage;
@@ -124,57 +258,68 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         });
         pagination.appendChild(nextButton);
-        updateButtonStates();
+    }
+
+    function handleEditClick(e) {
+        const row = e.target.closest('tr');
+        const checkbox = row.querySelector('input[type="checkbox"]');
+        
+        if (!checkbox.checked) {
+            alert("Ви можете редагувати тільки студента, якого відмічено галочкою!");
+            return;
+        }
+
+        currentRow = row;
+        isEditing = true;
+        modalTitle.textContent = "Редагувати студента";
+        studentModal.style.display = "flex";
+
+        document.getElementById("studentGroup").value = currentRow.cells[1].innerText;
+        let fullName = currentRow.cells[2].innerText.trim().split(" ");
+        document.getElementById("studentName").value = fullName[0] || "";
+        document.getElementById("studentSurname").value = fullName.slice(1).join(" ") || "";
+        document.getElementById("studentGender").value = currentRow.cells[3].innerText;
+        let dateParts = currentRow.cells[4].innerText.split(".");
+        document.getElementById("studentBirthday").value = `${dateParts[2]}-${dateParts[1]}-${dateParts[0]}`;
+    }
+
+    function handleDeleteClick(e) {
+        const checkedBoxes = document.querySelectorAll('.studentsInfo input[type="checkbox"]:checked');
+        
+        if (checkedBoxes.length === 0) {
+            alert("Будь ласка, виберіть студента для видалення!");
+            return;
+        }
+
+        const studentNames = Array.from(checkedBoxes)
+            .map(checkbox => checkbox.closest('tr').cells[2].textContent.trim())
+            .join(", ");
+        openDeleteModal(studentNames);
     }
 
     function attachEventListeners() {
         document.querySelectorAll(".delete-btn").forEach(btn => {
             btn.removeEventListener('click', handleDeleteClick);
+            btn.addEventListener('click', handleDeleteClick);
         });
 
         document.querySelectorAll(".edit-btn").forEach(btn => {
             btn.removeEventListener('click', handleEditClick);
+            btn.addEventListener('click', handleEditClick);
         });
     }
 
-    function handleDeleteClick() {
-        const checkedBoxes = document.querySelectorAll('.studentsInfo input[type="checkbox"]:checked');
-        if (checkedBoxes.length === 0) {
-            alert("Please, enter student for remove!");
-            return;
-        }
+    openAddModalBtn.addEventListener("click", function () {
+        isEditing = false;
+        modalTitle.textContent = "Додати студента";
+        studentForm.reset();
+        clearValidationErrors();
+        studentModal.style.display = "flex";
+    });
 
-        const studentNames = Array.from(checkedBoxes).map(checkbox => 
-            checkbox.closest('tr').cells[2].textContent.trim()
-        ).join(", ");
-        openDeleteModal(studentNames);
-    }
-
-    function handleEditClick() {
-        const checkedBoxes = document.querySelectorAll('.studentsInfo input[type="checkbox"]:checked');
-        if (checkedBoxes.length === 0) {
-            alert("Please, enter student for edit!");
-            return;
-        }
-        currentRow = this.closest("tr");
-        editModal.style.display = "flex";
-        document.getElementById("editGroup").value = currentRow.cells[1].innerText;
-        let fullName = currentRow.cells[2].innerText.trim().split(" ");
-        document.getElementById("editName").value = fullName[0] || "";
-        document.getElementById("editSurname").value = fullName.slice(1).join(" ") || "";
-        document.getElementById("editGender").value = currentRow.cells[3].innerText;
-        let dateParts = currentRow.cells[4].innerText.split(".");
-        document.getElementById("editBirthday").value = `${dateParts[2]}-${dateParts[1]}-${dateParts[0]}`;
-        document.getElementById("editStatus").checked = currentRow.querySelector('.status').checked;
-    }
-
-    document.addEventListener('click', (e) => {
-        if (e.target.classList.contains('delete-btn')) {
-            handleDeleteClick.call(e.target);
-        }
-        if (e.target.classList.contains('edit-btn')) {
-            handleEditClick.call(e.target);
-        }
+    closeStudentModalBtn.addEventListener("click", function () {
+        studentModal.style.display = "none";
+        clearValidationErrors();
     });
 
     closeDeleteModalBtn.addEventListener("click", function () {
@@ -199,153 +344,78 @@ document.addEventListener("DOMContentLoaded", function () {
         for (let modal of modals) {
             if (event.target === modal) {
                 modal.style.display = "none";
+                if (modal.id === "studentModal") {
+                    clearValidationErrors();
+                }
             }
         }
     };
 
-    openAddModalBtn.addEventListener("click", function () {
-        addModal.style.display = "flex";
-    });
-
-    closeAddModalBtn.addEventListener("click", function () {
-        addModal.style.display = "none";
-    });
-
-    closeEditModalBtn.addEventListener("click", function () {
-        editModal.style.display = "none";
-    });
-
     var i = 0;
-    addStudentForm.addEventListener("submit", function (event) {
+
+    studentForm.addEventListener("submit", function (event) {
         event.preventDefault();
+        if (!validateForm()) return;
 
-        const group = document.getElementById("addGroup").value;
-        const name = document.getElementById("addName").value;
-        const surname = document.getElementById("addSurname").value;
-        const gender = document.getElementById("addGender").value;
-        const birthday = document.getElementById("addBirthday").value;
+        const group = document.getElementById("studentGroup").value;
+        const name = document.getElementById("studentName").value;
+        const surname = document.getElementById("studentSurname").value;
+        const gender = document.getElementById("studentGender").value;
+        const birthday = document.getElementById("studentBirthday").value;
 
-        const table = document.querySelector("tbody");
-        const newRow = document.createElement("tr");
+        const status = false;
 
-        newRow.classList.add("studentsInfo");
-        newRow.innerHTML = `
-            <td><input type="checkbox" id="check${i}"><label style="visibility: hidden;" for="check${i}">t</label></td>
-            <td>${group}</td>
-            <td>${name} ${surname}</td>
-            <td>${gender}</td>
-            <td>${birthday.split("-").reverse().join(".")}</td>
-            <td><input type="radio" class="status" id="status${i}"><label style="visibility: hidden;" for="status${i}">as</label></td>
-            <td>
-                <img src="pen.png" alt="Редагувати" title="Edit" class="edit-btn">
-                <img src="close.png" alt="Видалити" title="Delete" class="delete-btn">
-            </td>
-        `;
+        const studentData = serializeStudentData(
+            group,
+            name,
+            surname,
+            gender,
+            birthday,
+            status,
+            isEditing && currentRow ? currentRow.dataset.id : null
+        );
 
-        var namefromHTML = document.querySelector(".rightText").textContent.split(" ");
-        if (name === namefromHTML[0] && surname === namefromHTML[1]) {
-            newRow.querySelector(".status").checked = true;
-        }
-        i++;
-
-        table.appendChild(newRow);
-        addModal.style.display = "none";
-        addStudentForm.reset();
-        
-        updatePagination();
-        attachEventListeners();
-    });
-
-    editStudentForm.addEventListener("submit", function (event) {
-        event.preventDefault();
-        if (currentRow) {
-            const group = document.getElementById("editGroup").value;
-            const name = document.getElementById("editName").value;
-            const surname = document.getElementById("editSurname").value;
-            const gender = document.getElementById("editGender").value;
-            const birthday = document.getElementById("editBirthday").value;
-            const status = document.getElementById("editStatus").checked;
-
+        if (isEditing && currentRow) {
+            sendToServer(studentData, "edit");
             currentRow.cells[1].innerText = group;
             currentRow.cells[2].innerText = `${name} ${surname}`;
             currentRow.cells[3].innerText = gender;
             currentRow.cells[4].innerText = birthday.split("-").reverse().join(".");
             currentRow.querySelector('.status').checked = status;
+        } else {
+            sendToServer(studentData, "add");
+            const table = document.querySelector("tbody");
 
-            editModal.style.display = "none";
-            editStudentForm.reset();
-            currentRow = null;
+            const newRow = document.createElement("tr");
+            newRow.classList.add("studentsInfo");
+            newRow.dataset.id = studentData.id;
+            newRow.innerHTML = `
+                <td><input type="checkbox" id="check${i}"><label style="visibility: hidden;" for="check${i}">t</label></td>
+                <td>${group}</td>
+                <td>${name} ${surname}</td>
+                <td>${gender}</td>
+                <td>${birthday.split("-").reverse().join(".")}</td>
+                <td><input type="radio" class="status" id="status${i}"><label style="visibility: hidden;" for="status${i}">as</label></td>
+                <td>
+                    <img src="pen.png" alt="Редагувати" title="Edit" class="edit-btn">
+                    <img src="close.png" alt="Видалити" title="Delete" class="delete-btn">
+                </td>
+            `;
+
+            i++;
+            newRow.querySelector(".status").checked = status;
+
+            table.appendChild(newRow);
+            updatePagination();
+            attachEventListeners();
         }
+
+        clearValidationErrors();
+        studentModal.style.display = "none";
+        studentForm.reset();
+        currentRow = null;
+        alert('Студента успішно ' + (isEditing ? 'оновлено' : 'додано'));
     });
-
-    updatePagination();
-    attachEventListeners();
-
-    editStudentForm.addEventListener("submit", function (event) {
-        event.preventDefault();
-        currentRow.cells[1].innerText = document.getElementById("editGroup").value;
-        let fullName = document.getElementById("editName").value + " " + document.getElementById("editSurname").value;
-        currentRow.cells[2].innerText = fullName.trim();
-        currentRow.cells[3].innerText = document.getElementById("editGender").value;
-        currentRow.cells[4].innerText = document.getElementById("editBirthday").value.split("-").reverse().join(".");
-        editModal.style.display = "none";
-    });
-
-    const userProfile = document.querySelector(".dropbutton");
-    const dropdownContent = document.querySelector(".dropdown-content");
-
-    userProfile.addEventListener("click", function (event) {
-        event.stopPropagation();
-        dropdownContent.style.display = dropdownContent.style.display === "block" ? "none" : "block";
-    });
-
-    document.addEventListener("click", function (event) {
-        if (!event.target.closest(".dropbutton")) {
-            dropdownContent.style.display = "none";
-        }
-    });
-
-    const notificationWrapper = document.querySelector(".notification-wrapper");
-    const notificationMenu = document.querySelector(".drop-notification");
-
-    notificationWrapper.addEventListener("mouseenter", function () {
-        notificationMenu.style.display = "block";
-    });
-    
-    notificationWrapper.addEventListener("mouseleave", function () {
-        notificationMenu.style.display = "none";
-    });
-
-    document.addEventListener("click", function (event) {
-        if (!event.target.closest(".notification-wrapper")) {
-            notificationMenu.style.display = "none";
-        }
-    });
-    
-    let notificationBell = document.getElementById("notification");
-    
-    const defaultSrc = "notification.png";
-    const newSrc = "bell.png";
-    
-    const savedImage = sessionStorage.getItem("bellIconSrc") || defaultSrc;
-    notificationBell.src = savedImage;
-    
-    notificationBell.addEventListener("click", function () {
-        notificationBell.src = newSrc;
-        sessionStorage.setItem("bellIconSrc", newSrc); 
-    
-        window.location.href = "/messages.html";
-    });
-    
-
-    // const notificationIcon = document.getElementById("notification");
-    // notificationIcon.addEventListener("click", function (event) {
-    //     event.stopPropagation();
-    //     notificationIcon.src = "bell.png";
-    //     setTimeout(() => {
-    //         notificationMenu.style.display = notificationMenu.style.display === "block" ? "none" : "block";
-    //     }, 100);
-    // });
 
     updatePagination();
     attachEventListeners();
